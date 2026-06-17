@@ -348,6 +348,7 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - /home/vmpipe/portainer_data:/home/vmpipe/portainer_data
+    command: --data /home/vmpipe/portainer_data
     networks:
       - monetique-eye-net
       
