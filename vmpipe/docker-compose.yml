@@ -15,7 +15,7 @@ services:
     environment:
       - VAULT_ADDR=http://127.0.0.1:8200
     volumes:
-      - ./vault/config:/vault/config
+      - /home/vmpipe/monetique-eye/gitops/vmpipe/vault/config:/vault/config
       - vault_data:/vault/file
     cap_add:
       - IPC_LOCK
@@ -40,7 +40,7 @@ services:
     ports:
       - "3306:3306"
     volumes:
-      - ./../../data/mysql:/var/lib/mysql
+      - /home/vmpipe/monetique-eye/data/mysql:/var/lib/mysql
     healthcheck:
 
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
@@ -61,14 +61,14 @@ services:
       env: "central-node"
       node: "central-node"
     volumes:
-      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
-      - ./prometheus/alert_rules.yml:/etc/prometheus/alert_rules.yml
-      - ./prometheus/prediction_rules.yml:/etc/prometheus/prediction_rules.yml
-      - ./prometheus/file_sd:/etc/prometheus/file_sd
-      - ./prometheus/conf.d:/etc/prometheus/conf.d
-      - ./prometheus/rules:/etc/prometheus/rules
+      - /home/vmpipe/monetique-eye/gitops/vmpipe/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+      - /home/vmpipe/monetique-eye/gitops/vmpipe/prometheus/alert_rules.yml:/etc/prometheus/alert_rules.yml
+      - /home/vmpipe/monetique-eye/gitops/vmpipe/prometheus/prediction_rules.yml:/etc/prometheus/prediction_rules.yml
+      - /home/vmpipe/monetique-eye/gitops/vmpipe/prometheus/file_sd:/etc/prometheus/file_sd
+      - /home/vmpipe/monetique-eye/gitops/vmpipe/prometheus/conf.d:/etc/prometheus/conf.d
+      - /home/vmpipe/monetique-eye/gitops/vmpipe/prometheus/rules:/etc/prometheus/rules
       - /var/run/docker.sock:/var/run/docker.sock:ro
-      - ./../../data/prometheus:/prometheus
+      - /home/vmpipe/monetique-eye/data/prometheus:/prometheus
     command:
       - '--config.file=/etc/prometheus/prometheus.yml'
       - '--storage.tsdb.path=/prometheus'
@@ -143,7 +143,7 @@ services:
       - /var/log:/var/log:ro
       - /var/lib/docker/containers:/var/lib/docker/containers:ro
       - /var/run/docker.sock:/var/run/docker.sock:ro
-      - ./filebeat/filebeat.yml:/usr/share/filebeat/filebeat.yml:ro
+      - /home/vmpipe/monetique-eye/gitops/vmpipe/filebeat/filebeat.yml:/usr/share/filebeat/filebeat.yml:ro
     command: filebeat -e -strict.perms=false
     ports:
       - "5066:5066"
@@ -164,7 +164,7 @@ services:
     ports:
       - "9115:9115"
     volumes:
-      - ./blackbox/blackbox.yml:/etc/blackbox_exporter/config.yml
+      - /home/vmpipe/monetique-eye/gitops/vmpipe/blackbox/blackbox.yml:/etc/blackbox_exporter/config.yml
     command:
       - '--config.file=/etc/blackbox_exporter/config.yml'
     networks:
@@ -197,8 +197,8 @@ services:
     ports:
       - "9093:9093"
     volumes:
-      - ./alertmanager/alertmanager.yml:/etc/alertmanager/alertmanager.yml:ro
-      - ./alertmanager/templates:/etc/alertmanager/templates
+      - /home/vmpipe/monetique-eye/gitops/vmpipe/alertmanager/alertmanager.yml:/etc/alertmanager/alertmanager.yml:ro
+      - /home/vmpipe/monetique-eye/gitops/vmpipe/alertmanager/templates:/etc/alertmanager/templates
     networks:
       - monetique-eye-net
   
@@ -217,7 +217,7 @@ services:
     ports:
       - "3000:3000"
     volumes:
-      - ./grafana/provisioning:/etc/grafana/provisioning
+      - /home/vmpipe/monetique-eye/gitops/vmpipe/grafana/provisioning:/etc/grafana/provisioning
     depends_on:
       prometheus:
         condition: service_healthy
@@ -238,7 +238,7 @@ services:
     ports:
       - "9200:9200"
     volumes:
-      - ./../../data/elasticsearch:/usr/share/elasticsearch/data
+      - /home/vmpipe/monetique-eye/data/elasticsearch:/usr/share/elasticsearch/data
     networks:
       - monetique-eye-net
 
@@ -251,7 +251,7 @@ services:
       env: "central-node"
       node: "central-node"
     volumes:
-      - ./logstash/logstash.conf:/usr/share/logstash/pipeline/logstash.conf
+      - /home/vmpipe/monetique-eye/gitops/vmpipe/logstash/logstash.conf:/usr/share/logstash/pipeline/logstash.conf
     ports:
         - "5044:5044"
         - "5045:5045"
@@ -323,7 +323,7 @@ services:
       - "8082:8080"
       - "50000:50000"
     volumes:
-      - ./../../data/jenkins:/var/jenkins_home
+      - /home/vmpipe/monetique-eye/data/jenkins:/var/jenkins_home
       - /var/run/docker.sock:/var/run/docker.sock
     environment:
       - JAVA_OPTS=-Xmx512m
@@ -364,9 +364,9 @@ services:
       com.monetique.environment: "central-node"
       com.monetique.category: "backend"
     volumes:
-      - ./../../gitops:/app/gitops
-      - ./prometheus/conf.d:/opt/monitoring/prometheus/conf.d
-      - ./prometheus/rules:/opt/monitoring/prometheus/rules
+      - /home/vmpipe/monetique-eye/gitops:/app/gitops
+      - /home/vmpipe/monetique-eye/gitops/vmpipe/prometheus/conf.d:/opt/monitoring/prometheus/conf.d
+      - /home/vmpipe/monetique-eye/gitops/vmpipe/prometheus/rules:/opt/monitoring/prometheus/rules
       - /var/run/docker.sock:/var/run/docker.sock:ro
     environment:
       VAULT_ROLE_ID: ${VAULT_ROLE_ID}
