@@ -356,6 +356,7 @@ services:
       MONITORING_PROMETHEUS_RELOAD_URL: "http://prometheus:9090/-/reload"
       MONITORING_BLACKBOX_EXPORTER_URL: "blackbox-exporter:9115"
       MONETIQUE_GITOPS_PATH: "./gitops"
+      MONETIQUE_SECURITY_API_KEY: "monetique-super-secret-key-2026"
     ports:
       - "8880:8880"
     mem_limit: 512m
@@ -390,6 +391,30 @@ services:
       - backend
     networks:
       - monetique-eye-net
+
+  falco:
+    image: falcosecurity/falco-no-driver:latest
+    container_name: falco
+    restart: always
+    privileged: true
+    labels:
+      app: "monetique-eye"
+      env: "central-node"
+      node: "central-node"
+    volumes:
+      - /var/run/docker.sock:/host/var/run/docker.sock:ro
+      - /proc:/host/proc:ro
+      - /etc:/host/etc:ro
+      - /home/vmpipe/monetique-eye/gitops/vmpipe/falco/falco.yaml:/etc/falco/falco.yaml:ro
+      - /home/vmpipe/monetique-eye/gitops/ansible/falco_rules.local.yaml:/etc/falco/falco_rules.local.yaml:ro
+    environment:
+      - FALCO_HTTP_OUTPUT_ENABLED=true
+      - FALCO_HTTP_OUTPUT_URL=http://backend:8880/api/security/falco/ingest
+      - FALCO_HTTP_OUTPUT_USER_AGENT=falco/monetique
+    networks:
+      - monetique-eye-net
+    depends_on:
+      - backend
 
 volumes:
   mysql_data:

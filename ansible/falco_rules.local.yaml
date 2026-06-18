@@ -1,0 +1,11 @@
+- rule: Unexpected process in Spring Boot container
+  desc: Detect any process spawned inside the backend container that is not the expected JVM process or known shell commands used by the entrypoint script
+  condition: >
+    spawned_process and
+    container.image.repository contains "monetique" and
+    container.image.repository contains "backend" and
+    not proc.name in (java, sh, bash, dos2unix, ssh, sshpass, ansible-playbook, git, docker)
+  output: >
+    Unexpected process in backend container (user=%user.name command=%proc.cmdline container=%container.name image=%container.image.repository)
+  priority: CRITICAL
+  tags: [monetique, backend, process]

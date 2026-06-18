@@ -1,0 +1,24 @@
+# Falco configuration for Monetique Eye
+rules_file:
+  - /etc/falco/falco_rules.yaml
+  - /etc/falco/falco_rules.local.yaml
+
+json_output: true
+json_include_output_property: true
+json_include_tags_property: true
+
+http_output:
+  enabled: true
+  url: http://backend:8880/api/security/falco/ingest
+  user_agent: "falco/monetique-eye"
+
+stdout_output:
+  enabled: true
+
+syslog_output:
+  enabled: false
+
+log_stderr: true
+log_level: info
+
+priority: WARNING

@@ -13,6 +13,9 @@ pipeline {
         SONAR_LOGIN = credentials('sonar-login')
         SONAR_PASSWORD = credentials('sonar-password')
         NVD_API_KEY = credentials('nvd-api-key')
+        SECURITY_API_KEY = credentials('security-api-key')
+        MONETIQUE_EYE_URL = credentials('monetique-eye-url')
+        APP_ID = credentials('monetique-app-id')
     }
 
     stages {
@@ -98,6 +101,29 @@ pipeline {
             }
         }
 
+        stage('Security Scan Upload') {
+            steps {
+                catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
+                    dir('frontend') {
+                        sh '''
+                            if [ -f odc-reports/dependency-check-report.json ]; then
+                                curl -X POST "${MONETIQUE_EYE_URL}/api/security/reports/upload?applicationId=${APP_ID}&reportType=DEPENDENCY_CHECK&component=FRONTEND&buildNumber=${BUILD_NUMBER}" \
+                                    -H "X-API-Key: ${SECURITY_API_KEY}" \
+                                    -H "Content-Type: application/json" \
+                                    --data-binary @odc-reports/dependency-check-report.json || echo "WARN: Failed to upload Dependency-Check report"
+                            fi
+
+                            if [ -f sonar-report.json ]; then
+                                curl -X POST "${MONETIQUE_EYE_URL}/api/security/reports/upload?applicationId=${APP_ID}&reportType=SONARQUBE&component=FRONTEND&buildNumber=${BUILD_NUMBER}" \
+                                    -H "X-API-Key: ${SECURITY_API_KEY}" \
+                                    -H "Content-Type: application/json" \
+                                    --data-binary @sonar-report.json || echo "WARN: Failed to upload SonarQube report"
+                            fi
+                        '''
+                    }
+                }
+            }
+        }
 
     }
 
