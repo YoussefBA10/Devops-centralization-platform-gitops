@@ -18,7 +18,9 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                checkout scm
+                git url: 'https://github.com/YoussefBA10/monetique-eye.git',
+                    credentialsId: 'git',
+                    branch: 'main'
             }
         }
 
