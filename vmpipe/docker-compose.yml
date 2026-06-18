@@ -356,7 +356,6 @@ services:
       MONITORING_PROMETHEUS_RELOAD_URL: "http://prometheus:9090/-/reload"
       MONITORING_BLACKBOX_EXPORTER_URL: "blackbox-exporter:9115"
       MONETIQUE_GITOPS_PATH: "./gitops"
-      MONETIQUE_SECURITY_API_KEY: "monetique-super-secret-key-2026"
     ports:
       - "8880:8880"
     mem_limit: 512m
