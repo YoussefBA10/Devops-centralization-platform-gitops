@@ -400,7 +400,7 @@ services:
       app: "monetique-eye"
       env: "central-node"
       node: "central-node"
-    command: ["falco", "-o", "engine.kind=modern_bpf"]
+    command: ["falco", "-o", "engine.kind=modern_ebpf"]
     volumes:
       - /var/run/docker.sock:/host/var/run/docker.sock:ro
       - /proc:/host/proc:ro
