@@ -392,7 +392,7 @@ services:
       - monetique-eye-net
 
   falco:
-    image: falcosecurity/falco:latest
+    image: falcosecurity/falco:0.39.2
     container_name: falco
     restart: always
     privileged: true
