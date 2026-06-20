@@ -15,7 +15,7 @@ pipeline {
         NVD_API_KEY = credentials('nvd-api-key')
         SECURITY_API_KEY = credentials('security-api-key')
         MONETIQUE_EYE_URL = credentials('monetique-eye-url')
-        APP_ID = credentials('monetique-app-id')
+        APP_ID = credentials('monetique-frontend-app-id')
     }
 
     stages {
