@@ -1,11 +1,41 @@
-- rule: Unexpected process in Spring Boot container
-  desc: Detect any process spawned inside the backend container that is not the expected JVM process or known shell commands used by the entrypoint script
+- macro: monetique_frontend_container
+  condition: >
+    container.image.repository = "monetique/frontend"
+
+- macro: frontend_expected_runtime_procs
+  condition: >
+    proc.name in (nginx, node)
+
+- rule: Unexpected process in frontend container
+  desc: >
+    Detect any process spawned inside the frontend container outside of
+    expected nginx/node serving processes.
   condition: >
     spawned_process and
-    container.image.repository contains "monetique" and
-    container.image.repository contains "backend" and
-    not proc.name in (java, sh, bash, dos2unix, ssh, sshpass, ansible-playbook, git, docker)
+    monetique_frontend_container and
+    not frontend_expected_runtime_procs
   output: >
-    Unexpected process in backend container (user=%user.name command=%proc.cmdline container=%container.name image=%container.image.repository)
+    Unexpected process in frontend container (user=%user.name command=%proc.cmdline container=%container.name image=%container.image.repository parent=%proc.pname)
+  priority: CRITICAL
+  tags: [monetique, frontend, process]
+  - macro: monetique_backend_container
+  condition: >
+    container.image.repository = "monetique/backend"
+
+- macro: backend_expected_runtime_procs
+  condition: >
+    proc.name in (java, sh, bash, dos2unix)
+
+- rule: Unexpected process in Spring Boot container
+  desc: >
+    Detect any process spawned inside the backend container outside of
+    expected JVM/entrypoint runtime processes. Excludes deploy-time tooling,
+    which should not be present after entrypoint completes.
+  condition: >
+    spawned_process and
+    monetique_backend_container and
+    not backend_expected_runtime_procs
+  output: >
+    Unexpected process in backend container (user=%user.name command=%proc.cmdline container=%container.name image=%container.image.repository parent=%proc.pname)
   priority: CRITICAL
   tags: [monetique, backend, process]
