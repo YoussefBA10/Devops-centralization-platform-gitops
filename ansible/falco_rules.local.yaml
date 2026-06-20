@@ -18,7 +18,8 @@
     Unexpected process in frontend container (user=%user.name command=%proc.cmdline container=%container.name image=%container.image.repository parent=%proc.pname)
   priority: CRITICAL
   tags: [monetique, frontend, process]
-  - macro: monetique_backend_container
+
+- macro: monetique_backend_container
   condition: >
     container.image.repository = "monetique/backend"
 
