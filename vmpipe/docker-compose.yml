@@ -413,8 +413,6 @@ services:
       - FALCO_HTTP_OUTPUT_USER_AGENT=falco/monetique
     networks:
       - monetique-eye-net
-    depends_on:
-      - backend
 
 volumes:
   mysql_data:
