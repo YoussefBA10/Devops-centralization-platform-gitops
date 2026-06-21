@@ -23,7 +23,3 @@ log_level: info
 priority: WARNING
 
 buffered_outputs: false
-
-outputs:
-  rate: 1
-  max_burst: 10

@@ -1,42 +1,38 @@
 - macro: monetique_frontend_container
-  condition: >
-    container.image.repository = "monetique/frontend"
+  condition: container.image.repository = "monetique/frontend"
 
 - macro: frontend_expected_runtime_procs
-  condition: >
-    proc.name in (nginx, node)
+  condition: proc.name in (nginx, node)
 
 - rule: Unexpected process in frontend container
-  desc: >
+  desc: >-
     Detect any process spawned inside the frontend container outside of
     expected nginx/node serving processes.
-  condition: >
+  condition: >-
     spawned_process and
     monetique_frontend_container and
     not frontend_expected_runtime_procs
-  output: >
+  output: >-
     Unexpected process in frontend container (user=%user.name command=%proc.cmdline container=%container.name image=%container.image.repository parent=%proc.pname)
   priority: CRITICAL
   tags: [monetique, frontend, process]
 
 - macro: monetique_backend_container
-  condition: >
-    container.image.repository = "monetique/backend"
+  condition: container.image.repository = "monetique/backend"
 
 - macro: backend_expected_runtime_procs
-  condition: >
-    proc.name in (java, sh, bash, dos2unix)
+  condition: proc.name in (java, sh, bash, dos2unix)
 
 - rule: Unexpected process in Spring Boot container
-  desc: >
+  desc: >-
     Detect any process spawned inside the backend container outside of
     expected JVM/entrypoint runtime processes. Excludes deploy-time tooling,
     which should not be present after entrypoint completes.
-  condition: >
+  condition: >-
     spawned_process and
     monetique_backend_container and
     not backend_expected_runtime_procs
-  output: >
+  output: >-
     Unexpected process in backend container (user=%user.name command=%proc.cmdline container=%container.name image=%container.image.repository parent=%proc.pname)
   priority: CRITICAL
   tags: [monetique, backend, process]
