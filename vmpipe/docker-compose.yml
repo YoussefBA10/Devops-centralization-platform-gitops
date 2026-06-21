@@ -403,6 +403,7 @@ services:
     command: ["falco", "-o", "engine.kind=modern_ebpf"]
     volumes:
       - /var/run/docker.sock:/host/var/run/docker.sock:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
       - /proc:/host/proc:ro
       - /etc:/host/etc:ro
       - /home/vmpipe/monetique-eye/gitops/vmpipe/falco/falco.yaml:/etc/falco/falco.yaml:ro
