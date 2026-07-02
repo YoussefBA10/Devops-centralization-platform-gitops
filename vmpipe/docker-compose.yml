@@ -390,7 +390,7 @@ services:
       - backend
     networks:
       - monetique-eye-net
-#ss
+
   falco:
     image: falcosecurity/falco:0.39.2
     container_name: falco
