@@ -373,7 +373,7 @@ services:
       retries: 3
     networks:
       - monetique-eye-net
-
+#33
   frontend:
     image: localhost:8083/monetique/monetique-frontend:latest
     container_name: frontend
