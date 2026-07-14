@@ -343,7 +343,7 @@ services:
       com.monetique.category: "backend"
     volumes:
       - /home/vmpipe/monetique-eye/gitops:/app/gitops
-      - /home/vmpipe/monetique-eye/gitops/vmpipe/prometheus/file_sd:/opt/monitoring/prometheus/conf.d
+      - /home/vmpipe/monetique-eye/gitops/vmpipe/prometheus/conf.d:/opt/monitoring/prometheus/conf.d
       - /home/vmpipe/monetique-eye/gitops/vmpipe/prometheus/rules:/opt/monitoring/prometheus/rules
       - /var/run/docker.sock:/var/run/docker.sock:ro
     environment:

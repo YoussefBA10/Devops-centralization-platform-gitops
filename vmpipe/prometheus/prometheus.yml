@@ -125,7 +125,7 @@ scrape_configs:
     file_sd_configs:
       - files:
           - '/etc/prometheus/file_sd/blackbox_targets.yml'
-          - '/etc/prometheus/file_sd/network_monitor.yml'
+          - '/etc/prometheus/conf.d/network_monitor.yml'
         refresh_interval: 15s
     relabel_configs:
       - source_labels: [__address__]
