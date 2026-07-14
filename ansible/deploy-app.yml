@@ -1,6 +1,7 @@
 ---
 - name: Deploy Custom Application Flow
   hosts: "{{ target_host }}"
+  become: yes
 
   vars:
     app_dir: "/opt/monetique/apps/{{ appName }}"
