@@ -21,7 +21,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git url: 'https://github.com/YoussefBA10/monetique-eye.git',
+                git url: 'https://github.com/YoussefBA10/Devops-centralization-platform.git',
                     credentialsId: 'git',
                     branch: 'main'
             }
