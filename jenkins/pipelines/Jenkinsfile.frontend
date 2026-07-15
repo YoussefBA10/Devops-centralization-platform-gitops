@@ -91,8 +91,7 @@ pipeline {
                           --dockerfile \${PWD}/Dockerfile \
                           --destination ${REGISTRY}/${DOCKER_IMAGE}:${DOCKER_TAG} \
                           --destination ${REGISTRY}/${DOCKER_IMAGE}:latest \
-                          --cache=true \
-                          --cache-repo=${REGISTRY}/cache \
+                          --cache=false \
                           --insecure \
                           --build-arg VITE_API_URL=\${BACKEND_API}/api
                         """
