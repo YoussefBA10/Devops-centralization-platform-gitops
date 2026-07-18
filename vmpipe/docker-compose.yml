@@ -19,7 +19,7 @@ services:
       - vault_data:/vault/file
     cap_add:
       - IPC_LOCK
-    command: server
+    command: vault server -config=/vault/config/vault.json
     networks:
       - monetique-eye-net
 
@@ -35,8 +35,8 @@ services:
       MYSQL_DATABASE: "monetique_eye_db"
       MYSQL_USER: "youss"
       # Note: MYSQL_PASSWORD and MYSQL_ROOT_PASSWORD must be fetched from Vault and passed during fresh deployment
-      # MYSQL_PASSWORD: ${MYSQL_PASSWORD}
-      # MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
     ports:
       - "3306:3306"
     volumes:
@@ -329,6 +329,49 @@ services:
       - JAVA_OPTS=-Xmx512m
     networks:
       - monetique-eye-net
+
+  
+  falco:
+    image: falcosecurity/falco:0.39.2
+    container_name: falco
+    restart: always
+    privileged: true
+    labels:
+      app: "monetique-eye"
+      env: "central-node"
+      node: "central-node"
+    command: ["falco", "-o", "engine.kind=modern_ebpf"]
+    volumes:
+      - /var/run/docker.sock:/host/var/run/docker.sock:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - /proc:/host/proc:ro
+      - /etc:/host/etc:ro
+      - ./falco/falco.yaml:/etc/falco/falco.yaml:ro
+      - ../ansible/falco_rules.local.yaml:/etc/falco/falco_rules.local.yaml:ro
+    environment:
+      - FALCO_HTTP_OUTPUT_ENABLED=true
+      - FALCO_HTTP_OUTPUT_URL=http://backend:8880/api/security/falco/ingest
+      - FALCO_HTTP_OUTPUT_USER_AGENT=falco/monetique
+    networks:
+      - monetique-eye-net
+      
+  portainer:
+    image: portainer/portainer-ce:latest
+    container_name: portainer
+    restart: always
+    labels:
+      app: "monetique-eye"
+      env: "central-node"
+      node: "central-node"
+    ports:
+      - "8000:8000"
+      - "9443:9443"
+      - "9002:9002" 
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - portainer_data:/data
+    networks:
+      - monetique-eye-net
       
 # --- Application Stack ---
   backend:
@@ -391,29 +434,6 @@ services:
     networks:
       - monetique-eye-net
 
-  falco:
-    image: falcosecurity/falco:0.39.2
-    container_name: falco
-    restart: always
-    privileged: true
-    labels:
-      app: "monetique-eye"
-      env: "central-node"
-      node: "central-node"
-    command: ["falco", "-o", "engine.kind=modern_ebpf"]
-    volumes:
-      - /var/run/docker.sock:/host/var/run/docker.sock:ro
-      - /var/run/docker.sock:/var/run/docker.sock:ro
-      - /proc:/host/proc:ro
-      - /etc:/host/etc:ro
-      - ./falco/falco.yaml:/etc/falco/falco.yaml:ro
-      - ../ansible/falco_rules.local.yaml:/etc/falco/falco_rules.local.yaml:ro
-    environment:
-      - FALCO_HTTP_OUTPUT_ENABLED=true
-      - FALCO_HTTP_OUTPUT_URL=http://backend:8880/api/security/falco/ingest
-      - FALCO_HTTP_OUTPUT_USER_AGENT=falco/monetique
-    networks:
-      - monetique-eye-net
 
 volumes:
   mysql_data:
