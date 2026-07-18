@@ -61,11 +61,8 @@ services:
       env: "central-node"
       node: "central-node"
     volumes:
-      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
-      - ./prometheus/alert_rules.yml:/etc/prometheus/alert_rules.yml
-      - ./prometheus/prediction_rules.yml:/etc/prometheus/prediction_rules.yml
+      - ./prometheus:/etc/prometheus
       - ./prometheus/file_sd:/etc/prometheus/file_sd
-      - ./prometheus/conf.d:/etc/prometheus/conf.d
       - ./prometheus/rules:/etc/prometheus/rules
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - ../../data/prometheus:/prometheus
@@ -251,7 +248,7 @@ services:
       env: "central-node"
       node: "central-node"
     volumes:
-      - ./logstash/logstash.conf:/usr/share/logstash/pipeline/logstash.conf
+      - ./logstash:/usr/share/logstash/pipeline
     ports:
         - "5044:5044"
         - "5045:5045"
@@ -346,8 +343,8 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - /proc:/host/proc:ro
       - /etc:/host/etc:ro
-      - ./falco/falco.yaml:/etc/falco/falco.yaml:ro
-      - ../ansible/falco_rules.local.yaml:/etc/falco/falco_rules.local.yaml:ro
+      - ./falco:/etc/falco
+      - ../ansible:/etc/falco
     environment:
       - FALCO_HTTP_OUTPUT_ENABLED=true
       - FALCO_HTTP_OUTPUT_URL=http://backend:8880/api/security/falco/ingest
@@ -386,7 +383,7 @@ services:
       com.monetique.category: "backend"
     volumes:
       - ../../gitops:/app/gitops
-      - ./prometheus/conf.d:/opt/monitoring/prometheus/conf.d
+      - ./prometheus:/opt/monitoring/prometheus
       - ./prometheus/rules:/opt/monitoring/prometheus/rules
       - /var/run/docker.sock:/var/run/docker.sock:ro
     environment:
