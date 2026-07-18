@@ -143,7 +143,7 @@ services:
       - /var/log:/var/log:ro
       - /var/lib/docker/containers:/var/lib/docker/containers:ro
       - /var/run/docker.sock:/var/run/docker.sock:ro
-      - ./filebeat/filebeat.yml:/usr/share/filebeat/filebeat.yml:ro
+      - ./filebeat:/usr/share/filebeat
     command: filebeat -e -strict.perms=false
     ports:
       - "5066:5066"
@@ -197,7 +197,7 @@ services:
     ports:
       - "9093:9093"
     volumes:
-      - ./alertmanager/alertmanager.yml:/etc/alertmanager/alertmanager.yml:ro
+      - ./alertmanager:/etc/alertmanager
       - ./alertmanager/templates:/etc/alertmanager/templates
     networks:
       - monetique-eye-net
