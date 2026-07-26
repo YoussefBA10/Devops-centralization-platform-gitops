@@ -40,7 +40,7 @@ services:
     ports:
       - "3306:3306"
     volumes:
-      - ../../data/mysql:/var/lib/mysql
+      - mysql_data:/var/lib/mysql
     healthcheck:
 
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
@@ -65,7 +65,7 @@ services:
       - ./prometheus/file_sd:/etc/prometheus/file_sd
       - ./prometheus/rules:/etc/prometheus/rules
       - /var/run/docker.sock:/var/run/docker.sock:ro
-      - ../../data/prometheus:/prometheus
+      - prometheus_data:/prometheus
     command:
       - '--config.file=/etc/prometheus/prometheus.yml'
       - '--storage.tsdb.path=/prometheus'
@@ -235,7 +235,7 @@ services:
     ports:
       - "9200:9200"
     volumes:
-      - ../../data/elasticsearch:/usr/share/elasticsearch/data
+      - elasticsearch_data:/usr/share/elasticsearch/data
     networks:
       - monetique-eye-net
 
@@ -320,7 +320,7 @@ services:
       - "8082:8080"
       - "50000:50000"
     volumes:
-      - ../../data/jenkins:/var/jenkins_home
+      - jenkins_data:/var/jenkins_home
       - /var/run/docker.sock:/var/run/docker.sock
     environment:
       - JAVA_OPTS=-Xmx512m
@@ -441,6 +441,7 @@ volumes:
   sonarqube_logs:
   vault_data:
   portainer_data:
+  jenkins_data:
 
 networks:
   monetique-eye-net:
