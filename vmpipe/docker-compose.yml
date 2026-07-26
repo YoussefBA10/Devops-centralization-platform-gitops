@@ -15,7 +15,7 @@ services:
     environment:
       - VAULT_ADDR=http://127.0.0.1:8200
     volumes:
-      - ./vault/config:/vault/config
+      - /home/vmpipe/Devops-centralization-platform/gitops/vmpipe/vault/config:/vault/config
       - vault_data:/vault/file
     cap_add:
       - IPC_LOCK
@@ -61,7 +61,7 @@ services:
       env: "central-node"
       node: "central-node"
     volumes:
-      - ./prometheus:/etc/prometheus
+      - /home/vmpipe/Devops-centralization-platform/gitops/vmpipe/prometheus:/etc/prometheus
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - prometheus_data:/prometheus
     command:
@@ -138,7 +138,7 @@ services:
       - /var/log:/var/log:ro
       - /var/lib/docker/containers:/var/lib/docker/containers:ro
       - /var/run/docker.sock:/var/run/docker.sock:ro
-      - ./filebeat:/usr/share/filebeat
+      - /home/vmpipe/Devops-centralization-platform/gitops/vmpipe/filebeat:/usr/share/filebeat
     command: filebeat -e -strict.perms=false
     ports:
       - "5066:5066"
@@ -159,7 +159,7 @@ services:
     ports:
       - "9115:9115"
     volumes:
-      - ./blackbox:/etc/blackbox_exporter
+      - /home/vmpipe/Devops-centralization-platform/gitops/vmpipe/blackbox:/etc/blackbox_exporter
     command:
       - '--config.file=/etc/blackbox_exporter/blackbox.yml'
     networks:
@@ -192,7 +192,7 @@ services:
     ports:
       - "9093:9093"
     volumes:
-      - ./alertmanager:/etc/alertmanager
+      - /home/vmpipe/Devops-centralization-platform/gitops/vmpipe/alertmanager:/etc/alertmanager
     networks:
       - monetique-eye-net
   
@@ -211,7 +211,7 @@ services:
     ports:
       - "3000:3000"
     volumes:
-      - ./grafana/provisioning:/etc/grafana/provisioning
+      - /home/vmpipe/Devops-centralization-platform/gitops/vmpipe/grafana/provisioning:/etc/grafana/provisioning
     depends_on:
       prometheus:
         condition: service_healthy
@@ -245,7 +245,7 @@ services:
       env: "central-node"
       node: "central-node"
     volumes:
-      - ./logstash:/usr/share/logstash/pipeline
+      - /home/vmpipe/Devops-centralization-platform/gitops/vmpipe/logstash:/usr/share/logstash/pipeline
     ports:
         - "5044:5044"
         - "5045:5045"
@@ -340,8 +340,8 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - /proc:/host/proc:ro
       - /etc:/host/etc:ro
-      - ./falco:/etc/falco
-      - ../ansible:/etc/falco
+      - /home/vmpipe/Devops-centralization-platform/gitops/vmpipe/falco:/etc/falco
+      - /home/vmpipe/Devops-centralization-platform/gitops/vmpipe/../ansible:/etc/falco
     environment:
       - FALCO_HTTP_OUTPUT_ENABLED=true
       - FALCO_HTTP_OUTPUT_URL=http://backend:8880/api/security/falco/ingest
@@ -379,9 +379,9 @@ services:
       com.monetique.environment: "central-node"
       com.monetique.category: "backend"
     volumes:
-      - ../../gitops:/app/gitops
-      - ./prometheus:/opt/monitoring/prometheus
-      - ./prometheus/rules:/opt/monitoring/prometheus/rules
+      - /home/vmpipe/Devops-centralization-platform/gitops/vmpipe/../../gitops:/app/gitops
+      - /home/vmpipe/Devops-centralization-platform/gitops/vmpipe/prometheus:/opt/monitoring/prometheus
+      - /home/vmpipe/Devops-centralization-platform/gitops/vmpipe/prometheus/rules:/opt/monitoring/prometheus/rules
       - /var/run/docker.sock:/var/run/docker.sock:ro
     environment:
       VAULT_ROLE_ID: ${VAULT_ROLE_ID}
