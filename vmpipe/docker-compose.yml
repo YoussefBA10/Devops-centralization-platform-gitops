@@ -62,8 +62,6 @@ services:
       node: "central-node"
     volumes:
       - ./prometheus:/etc/prometheus
-      - ./prometheus/file_sd:/etc/prometheus/file_sd
-      - ./prometheus/rules:/etc/prometheus/rules
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - prometheus_data:/prometheus
     command:
@@ -195,7 +193,6 @@ services:
       - "9093:9093"
     volumes:
       - ./alertmanager:/etc/alertmanager
-      - ./alertmanager/templates:/etc/alertmanager/templates
     networks:
       - monetique-eye-net
   
