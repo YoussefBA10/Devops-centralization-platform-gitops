@@ -112,7 +112,7 @@
 
     - name: Set cAdvisor Port Fact
       set_fact:
-        final_cadvisor_port: "{{ existing_cadvisor_port.stdout | default('8085') }}"
+        final_cadvisor_port: "{{ existing_cadvisor_port.stdout | default('8085', true) }}"
 
     - name: Output Final cAdvisor Port for Backend
       debug:
@@ -163,7 +163,7 @@
 
     - name: Set Node Exporter Port Fact
       set_fact:
-        final_node_exporter_port: "{{ existing_node_exporter_port.stdout | default('9100') }}"
+        final_node_exporter_port: "{{ existing_node_exporter_port.stdout | default('9100', true) }}"
 
     - name: Output Final Node Exporter Port for Backend
       debug:
