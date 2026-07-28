@@ -36,38 +36,3 @@
     environment: "central-node"
 
 
-- targets:
-  - "192.168.126.133:9100"
-  labels:
-    node_id: "2"
-    nodename: "node-133"
-    job: "node-exporter"
-    environment: "demo-pre-prod"
-- targets:
-  - "192.168.126.133:8085"
-  labels:
-    node_id: "2"
-    nodename: "node-133"
-    job: "cadvisor"
-    environment: "demo-pre-prod"
-- targets:
-  - "192.168.126.133:5066"
-  labels:
-    node_id: "2"
-    nodename: "node-133"
-    job: "filebeat"
-    environment: "demo-pre-prod"
-- targets:
-  - "192.168.126.133:8880"
-  labels:
-    node_id: "2"
-    nodename: "node-133"
-    job: "monetique-backend"
-    environment: "demo-pre-prod"
-- targets:
-  - "192.168.126.133:80"
-  labels:
-    node_id: "2"
-    nodename: "node-133"
-    job: "monetique-frontend"
-    environment: "demo-pre-prod"
