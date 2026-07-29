@@ -15,7 +15,8 @@ filebeat.inputs:
     - /var/log/*.log
 
 processors:
-  - add_docker_metadata: ~
+  - add_docker_metadata:
+      host: "unix:///var/run/docker.sock"
   - add_host_metadata: ~
   - add_fields:
       target: ''

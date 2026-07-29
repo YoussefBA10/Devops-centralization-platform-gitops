@@ -140,6 +140,8 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - /home/vmpipe/Devops-centralization-platform/gitops/vmpipe/filebeat/filebeat.yml:/usr/share/filebeat/filebeat.yml:ro
     command: filebeat -e -strict.perms=false
+    environment:
+      - FORCE_RESTART=1 # Trigger GitOps
     ports:
       - "5066:5066"
     depends_on:
