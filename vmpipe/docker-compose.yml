@@ -256,6 +256,7 @@ services:
       # Note: ELASTIC_PASSWORD must be fetched from Vault
       # - ELASTIC_PASSWORD=${ELASTIC_PASSWORD}
       - LS_JAVA_OPTS=-Xms256m -Xmx512m
+      - FORCE_RESTART=1 # Trigger GitOps
     depends_on:
       - elasticsearch
     networks:
